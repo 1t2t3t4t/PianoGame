@@ -1,4 +1,5 @@
 package Game;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -11,12 +12,10 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-
-public class ChatClient extends JFrame{
+public class ChatClient extends JFrame {
 	private Socket socket;
 	private String Username;
 	private ArrayList<Integer> sequence = new ArrayList();
@@ -25,8 +24,8 @@ public class ChatClient extends JFrame{
 	JButton enter = new JButton("Send");
 	JTextField inbox = new JTextField();
 	JTextArea chat = new JTextArea();
-	
-	public ChatClient(String username){
+
+	public ChatClient(String username) {
 		Username = username;
 		setGUI();
 		try {
@@ -38,28 +37,28 @@ public class ChatClient extends JFrame{
 			e.printStackTrace();
 		}
 		enter.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				String msgToSend = inbox.getText();
 				try {
-					output.writeUTF(Username+" : "+msgToSend);
+					output.writeUTF(Username + " : " + msgToSend);
 					inbox.setText("");
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}	
+				}
 			}
 		});
-		
-		Thread handleMessage = new Thread(){
-			
-			public void run(){
-				while(true){
+
+		Thread handleMessage = new Thread() {
+
+			public void run() {
+				while (true) {
 					try {
 						String in = input.readUTF();
-						String message = chat.getText()+"\n"+in;
+						String message = chat.getText() + "\n" + in;
 						chat.setText(message);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
@@ -68,17 +67,17 @@ public class ChatClient extends JFrame{
 				}
 			}
 		};
-		
+
 		handleMessage.start();
 	}
-	
-	public void setGUI(){
+
+	public void setGUI() {
 		this.setLayout(new BorderLayout());
-		this.add(chat,BorderLayout.CENTER);
+		this.add(chat, BorderLayout.CENTER);
 		this.add(enter, BorderLayout.EAST);
 		this.add(inbox, BorderLayout.SOUTH);
 		this.setPreferredSize(new Dimension(350, 250));
 		this.setVisible(true);
 	}
-	
+
 }

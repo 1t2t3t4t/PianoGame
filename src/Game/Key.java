@@ -1,21 +1,24 @@
 package Game;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 
-import javax.sound.midi.*;
+import javax.sound.midi.Instrument;
+import javax.sound.midi.MidiChannel;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Synthesizer;
 import javax.swing.JPanel;
-
-import org.w3c.dom.css.Rect;
 
 public class Key extends JPanel {
 
-	private Color c = new Color(255, 255, 255);
+	final String key;
+	final int note;
+
+	private Color color = new Color(255, 255, 255);
 	private int height;
 	private int width;
-	private final String key;
-	private final int note;
 	private Synthesizer synt;
 	private boolean isPressed = false;
 
@@ -33,7 +36,7 @@ public class Key extends JPanel {
 		if (key.contains("#")) {
 			height = 120;
 			width = 30;
-			c = c.DARK_GRAY.brighter();
+			color = color.DARK_GRAY.brighter();
 		} else {
 			height = 240;
 			width = 60;
@@ -42,7 +45,7 @@ public class Key extends JPanel {
 	}
 
 	public void keyPressed() {
-		c = c.darker();
+		color = color.darker();
 		this.repaint();
 		this.isPressed = true;
 		MidiChannel[] channel = synt.getChannels();
@@ -53,9 +56,9 @@ public class Key extends JPanel {
 
 	public void keyReleased() {
 		if (key.contains("#")) {
-			c = c.DARK_GRAY.brighter();
+			color = color.DARK_GRAY.brighter();
 		} else {
-			c = c.WHITE;
+			color = color.WHITE;
 		}
 		this.repaint();
 		this.isPressed = false;
@@ -78,7 +81,7 @@ public class Key extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.setColor(c);
+		g.setColor(color);
 		g.fillRect(0, 0, width, height);
 		g.setColor(Color.black);
 		g.drawRect(0, 0, width, height);
@@ -87,13 +90,13 @@ public class Key extends JPanel {
 
 	public void autoPlay() throws InterruptedException {
 		Graphics g = this.getGraphics();
-		c = c.darker();
+		color = color.darker();
 		MidiChannel[] channel = synt.getChannels();
 		Instrument[] instrument = synt.getDefaultSoundbank().getInstruments();
 		synt.loadInstrument(instrument[0]);
 		channel[0].noteOn(note, 100);
 
-		g.setColor(c);
+		g.setColor(color);
 		g.fillRect(0, 0, width, height);
 		g.setColor(Color.black);
 		g.drawRect(0, 0, width, height);
@@ -101,10 +104,10 @@ public class Key extends JPanel {
 
 		Thread.sleep(500);
 
-		c = c.brighter();
+		color = color.brighter();
 		channel[0].noteOff(note);
 
-		g.setColor(c);
+		g.setColor(color);
 		g.fillRect(0, 0, width, height);
 		g.setColor(Color.black);
 		g.drawRect(0, 0, width, height);

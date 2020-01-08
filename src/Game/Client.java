@@ -1,25 +1,20 @@
 package Game;
 
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import javax.sound.midi.MidiUnavailableException;
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class Client extends JFrame {
 	private Socket socket;
@@ -42,7 +37,9 @@ public class Client extends JFrame {
 			output.writeUTF(name);
 			joinRoom();
 			status.setText("Wait for room...");
-			dialog.showMessageDialog(null, "Welcome to the piano game"+"\n"+"Please wait for other player", "WELCOME!!", dialog.WARNING_MESSAGE);
+			dialog.showMessageDialog(null, "Welcome to the piano game" + "\n"
+					+ "Please wait for other player", "WELCOME!!",
+					dialog.WARNING_MESSAGE);
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -51,13 +48,14 @@ public class Client extends JFrame {
 			e.printStackTrace();
 		}
 		addWindowListener(new WindowAdapter() {
-		    @Override
-		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-		        if (JOptionPane.showConfirmDialog(null, 
-		            "Are you sure to close the game?", "Really Closing?", 
-		            JOptionPane.YES_NO_OPTION,
-		            JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
-		        	try {
+			@Override
+			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+				if (JOptionPane
+						.showConfirmDialog(null,
+								"Are you sure to close the game?",
+								"Really Closing?", JOptionPane.YES_NO_OPTION,
+								JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+					try {
 						socket.shutdownInput();
 						socket.shutdownOutput();
 						socket.close();
@@ -65,9 +63,9 @@ public class Client extends JFrame {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-		            //System.exit(0);
-		        }
-		    }
+					// System.exit(0);
+				}
+			}
 		});
 	}
 
@@ -82,7 +80,7 @@ public class Client extends JFrame {
 		this.addKeyListener(new keyListener());
 		this.setPreferredSize(new Dimension(800, 400));
 		dialog = new JOptionPane();
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	void joinRoom() {
@@ -108,12 +106,13 @@ public class Client extends JFrame {
 					new Thread(new myTurn()).start();
 				} else if (order.equals("opponentturn")) {
 					new Thread(new oppnentTurn()).start();
-				} else if (order.equals("sessiondone")){
-					dialog.showMessageDialog(null, "Opponent left the match.", "Game over", dialog.ERROR_MESSAGE);
-				}
-				else {
+				} else if (order.equals("sessiondone")) {
+					dialog.showMessageDialog(null, "Opponent left the match.",
+							"Game over", dialog.ERROR_MESSAGE);
+				} else {
 					int choice = dialog.showConfirmDialog(null, order,
-							"Do you want to rematch? "+5, dialog.YES_NO_OPTION);
+							"Do you want to rematch? " + 5,
+							dialog.YES_NO_OPTION);
 					int timer = 5;
 					while (timer >= 0) {
 						try {
@@ -147,13 +146,16 @@ public class Client extends JFrame {
 		public void run() {
 			// setEnabled(false);
 			ArrayList<Integer> Sequence = new ArrayList();
-			status.setText("Wait for opponent  (Match up with "+opponentName+")");
+			status.setText("Wait for opponent  (Match up with " + opponentName
+					+ ")");
 			while (true) {
 				try {
 					int note = input.readInt();
 					System.out.println("Note receieved " + note);
-					if(note ==404){
-						dialog.showMessageDialog(null, "Opponent left the match.", "Game over", dialog.ERROR_MESSAGE);
+					if (note == 404) {
+						dialog.showMessageDialog(null,
+								"Opponent left the match.", "Game over",
+								dialog.ERROR_MESSAGE);
 						socket.close();
 						return;
 					}
@@ -178,7 +180,7 @@ public class Client extends JFrame {
 			Double time = 0.0;
 			long start_time = System.nanoTime();
 			while (time < 20.0) {
-				time = (System.nanoTime() - start_time)/1e9;
+				time = (System.nanoTime() - start_time) / 1e9;
 				if (Sequence.size() <= sequence.size())
 					break;
 				status.setText("Start guessing " + time);
@@ -207,7 +209,7 @@ public class Client extends JFrame {
 	class myTurn implements Runnable {
 		public void run() {
 			// setEnabled(true);
-			status.setText("Start (Match up with "+opponentName+")");
+			status.setText("Start (Match up with " + opponentName + ")");
 			int time = 0;
 			sequence.clear();
 			while (time < 10) {

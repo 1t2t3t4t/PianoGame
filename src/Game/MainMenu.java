@@ -1,27 +1,26 @@
 package Game;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.ImageFilter;
 import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.Socket;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 //import javazoom.jl.player.Player;
 
 public class MainMenu extends JFrame {
-	//private Player playMP3;
+	// private Player playMP3;
 	private Image image;
 	private String Username;
 	private JLabel background;
@@ -29,7 +28,7 @@ public class MainMenu extends JFrame {
 	MainMenu() {
 		JOptionPane dialog = new JOptionPane();
 		Username = dialog.showInputDialog(null, "Insert Your name");
-		//playMusic();
+		// playMusic();
 		this.setPreferredSize(new Dimension(750, 450));
 		this.setLayout(null);
 		try {
@@ -87,7 +86,7 @@ public class MainMenu extends JFrame {
 				// TODO Auto-generated method stub
 				Client client;
 				try {
-					//playMP3.close();
+					// playMP3.close();
 					client = new Client(Username);
 					client.pack();
 					client.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -133,7 +132,7 @@ public class MainMenu extends JFrame {
 				// TODO Auto-generated method stub
 				Double i = Math.random();
 				System.out.println(i);
-				//playMP3.close();
+				// playMP3.close();
 				if (i >= 0.5) {
 					new keyboard();
 				} else {
@@ -147,7 +146,7 @@ public class MainMenu extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				try {
-					//playMP3.close();
+					// playMP3.close();
 					new Survival().pack();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -174,7 +173,6 @@ public class MainMenu extends JFrame {
 		add(changeSong);
 		setVisible(true);
 	}
-
 
 	public static void main(String[] args) {
 		new MainMenu().pack();

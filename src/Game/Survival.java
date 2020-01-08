@@ -16,7 +16,7 @@ public class Survival extends JFrame {
 	private JLabel label;
 	private Random random;
 	private ArrayList<Integer> sequence = new ArrayList();
-	
+
 	Survival() throws InterruptedException {
 		piano = new Piano();
 		label = new JLabel("WelCome!!!");
@@ -31,18 +31,18 @@ public class Survival extends JFrame {
 		Thread.sleep(2000);
 		botTurn(1);
 	}
-	
-	void botTurn(int round){
+
+	void botTurn(int round) {
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		int notes = 2+round;
+		int notes = 2 + round;
 		random = new Random();
 		ArrayList<Integer> sequence = new ArrayList();
-		for(int i=0;i<notes;i++){
+		for (int i = 0; i < notes; i++) {
 			sequence.add(random.nextInt(13));
 		}
 		try {
@@ -51,21 +51,24 @@ public class Survival extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(playerTurn(round,sequence)) botTurn(round++);
-		
+		if (playerTurn(round, sequence))
+			botTurn(round++);
+
 	}
-	
-	boolean playerTurn(int round,ArrayList<Integer> sequence){
+
+	boolean playerTurn(int round, ArrayList<Integer> sequence) {
 		label.setText("Start ");
 		this.sequence.clear();
 		Double time = 0.0;
 		long start_time = System.nanoTime();
 		while (time < 20.0) {
-			time = (System.nanoTime() - start_time)/1e9;
-			for(int i=0;i<this.sequence.size();i++){
-				if(this.sequence.get(i)!=sequence.get(i)){
+			time = (System.nanoTime() - start_time) / 1e9;
+			for (int i = 0; i < this.sequence.size(); i++) {
+				if (this.sequence.get(i) != sequence.get(i)) {
 					JOptionPane dialog = new JOptionPane();
-					dialog.showMessageDialog(null, "You lose in round "+round, "Lose", dialog.ERROR_MESSAGE);
+					dialog.showMessageDialog(null,
+							"You lose in round " + round, "Lose",
+							dialog.ERROR_MESSAGE);
 					return false;
 				}
 			}
@@ -75,8 +78,8 @@ public class Survival extends JFrame {
 		}
 		return true;
 	}
-	
-	public static void main(String[]args){
+
+	public static void main(String[] args) {
 		try {
 			new Survival().pack();
 		} catch (InterruptedException e) {
@@ -84,7 +87,7 @@ public class Survival extends JFrame {
 			e.printStackTrace();
 		}
 	}
-	
+
 	class keyListener implements KeyListener {
 
 		@Override
